@@ -48,3 +48,18 @@ INSERT INTO `NewDeal`.`roles` (description) VALUES
   ('senator'), -- land_trust
   ('councilor'), -- city_councilor (X councilors)
   ('congress'); -- state_councilor
+
+
+CREATE TABLE Projects (
+    id INT PRIMARY KEY,
+    title VARCHAR(255),
+    description TEXT,
+    expiration_date DATE,
+    owner INT,
+    FOREIGN KEY (owner) REFERENCES Users(id)
+);
+
+CREATE TABLE Pol (
+    hashed_user VARCHAR(255),
+    decision VARCHAR(255) CHECK (decision IN ('YES', 'NO', 'WHITE', NULL))
+);
