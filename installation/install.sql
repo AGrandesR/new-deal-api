@@ -19,6 +19,7 @@ CREATE TABLE `NewDeal`.`cities` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `land_trust` INT,
+  `size` INT,
   PRIMARY KEY (`id`)
 );
 
@@ -38,6 +39,15 @@ CREATE TABLE `NewDeal`.`users` (
   FOREIGN KEY (`state_trust`) REFERENCES `NewDeal`.`users`(`id`)
 );
 
+INSERT INTO `NewDeal`.`users` (`mail`, `password`, `city_trust`, `state_trust`, `role`, `city`)
+VALUES
+  ('test1@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL),
+  ('test3@newdeal', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL),
+  ('test4@test.es', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL),
+  ('test5@test.ec', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL),
+  ('test6@tes.tc', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL);
+
+
 
 INSERT INTO `NewDeal`.`roles` (description) VALUES 
   ('citizen'), -- Default value
@@ -55,11 +65,14 @@ CREATE TABLE Projects (
     title VARCHAR(255),
     description TEXT,
     expiration_date DATE,
+    vote_system INT,
     owner INT,
     FOREIGN KEY (owner) REFERENCES Users(id)
 );
 
-CREATE TABLE Pol (
-    hashed_user VARCHAR(255),
-    decision VARCHAR(255) CHECK (decision IN ('YES', 'NO', 'WHITE', NULL))
+CREATE TABLE Surveys (
+  project_id INT,
+  hashed_user VARCHAR(255),
+  decision VARCHAR(255) CHECK (decision IN ('YES', 'NO', 'WHITE', NULL))
+  FOREIGN KEY (owner) REFERENCES Project(id)
 );
