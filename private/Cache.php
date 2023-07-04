@@ -3,12 +3,16 @@ namespace Private;
 
 use Error;
 use Exception;
+use Private\Utils\Dir;
 
 class Cache {
     static function write(string $file_key, string $file_data) {
         try {
             $folderpath='../tmp/cache/';
             $folderpath=str_replace('/',DIRECTORY_SEPARATOR,$folderpath);
+
+            if(Dir::size($folderpath)>2048) throw new Exception("Clean", 4815459687356);
+            
             $filepath="$file_key.txt";
             if (!file_exists($folderpath)) {
                 //TODO: Throw email or telegram message
@@ -17,6 +21,8 @@ class Cache {
             file_put_contents($file_key, $file_data);
         } catch (Exception|Error $e){
             //TODO: Throw email or telegram message
+            if($e->getCode()==4815459687356) //TODO: Clean cache function
+            return false;
         }
     }
     static function read(string $file_key, int $expiration=600) {
