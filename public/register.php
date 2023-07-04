@@ -13,8 +13,8 @@ use Private\Utils\MailTool;
 try {
     if($_SERVER['REQUEST_METHOD']=='POST'){
             //CHECK POST BODY
-            if(!preg_match('/^\S+@\S+\.\S+$/',$_POST['mail'])) throw new Exception("Incorrect mail type", 1);
-            if(!preg_match('/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/',$_POST['pass'])) throw new Exception("Incorrect pass type", 1);
+            if(!preg_match('/^\S+@\S+\.\S+$/',$_POST['mail']??'')) throw new Exception("Incorrect mail type", 1);
+            if(!preg_match('/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/',$_POST['pass']??'')) throw new Exception("Incorrect pass type", 1);
     
             //SQL query
             $sqlFindUser="SELECT * FROM users WHERE mail = :mail;";

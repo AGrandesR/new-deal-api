@@ -22,9 +22,10 @@ class Auth {
             if($data['ip']!==Request::ip()) throw new Exception("Auth error: IP not match with original", 401);
     
             if($data['ua']!==Request::userAgent()) throw new Exception("Auth error: User Agent not match with original", 401);
-            return array(true,'');
+
+            return array(true,'', $data);
         } catch(Exception $e) {
-            if($e->getCode()==401) return array(false,$e->getMessage());
+            if($e->getCode()==401) return array(false,$e->getMessage(),$e);
             throw $e;
         }
     }
