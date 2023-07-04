@@ -17,5 +17,13 @@
     ],
     "require": {
         "phpmailer/phpmailer": "6.8"
+    },
+    "scripts": {
+        "serve":[
+            "php -S localhost:9898"
+        ]
+    },
+    "config": {
+        "process-timeout":0
     }
 }
