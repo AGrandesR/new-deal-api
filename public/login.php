@@ -6,10 +6,8 @@ Private\Utils\Dotenv::load('../.env');
 use Private\Auth;
 use Private\Request;
 use Private\Response;
-use Private\Utils\Cryptor;
-use Private\Utils\DatabaseTool;
+use Private\Data;
 use Private\Utils\HashTool As HT;
-use Private\Utils\MailTool;
 
 try {
     //CHECK POST BODY
@@ -18,13 +16,14 @@ try {
         'pass'=>'/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/'
     ]);
 
-    //SQL query
-    $sqlFindUser="SELECT * FROM users WHERE mail = :mail AND `password` = :pass";
-    $userData = DatabaseTool::sql('',$sqlFindUser,['mail'=>$_POST['mail'],'pass'=>HT::create($_POST['pass'])]);
+    $userData = Data::get('user', [
+        'mail'=>$_POST['mail'],
+        'pass'=>HT::create($_POST['pass'])
+    ]);
 
     if(is_array($userData)) Response::json([
         "status"=>"ok",
-        "token"=>Auth::token($userData[0]['id'],$userData[0]['mail'],$userData[0]['role']??'user')
+        "token"=>Auth::token($userData[0]['id'],$userData[0]['mail'],$userData[0]['city'],$userData[0]['role']??'user')
     ]);
     else Response::json([
         "status"=>"ko"

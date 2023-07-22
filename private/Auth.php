@@ -21,7 +21,7 @@ class Auth {
     
             if($data['ip']!==Request::ip()) throw new Exception("Auth error: IP not match with original", 401);
     
-            if($data['ua']!==Request::userAgent()) throw new Exception("Auth error: User Agent not match with original", 401);
+            //if($data['ua']!==Request::userAgent()) throw new Exception("Auth error: User Agent not match with original", 401);
 
             return array(true,'', $data);
         } catch(Exception $e) {
@@ -30,15 +30,25 @@ class Auth {
         }
     }
 
-    static function token($id, $mail, $role='user') : string {
+    static function token($id, $mail, $city, $role='user') : string {
         return Cryptor::encrypt([
             'id'=>$id,
             'mail'=>$mail,
             'role'=>$role,
+            'city'=>$city,
             'time'=>time(),
-            'ip'=>Request::ip(),
-            'ua'=>Request::userAgent()
+            'ip'=>Request::ip()
+            //'ua'=>Request::userAgent()
         ],$_ENV['CRYPTOR_SECRET']);
+    }
+
+    static function middleware($roles) {
+        $auth=self::user($roles);
+        if($auth[0]) return $auth[2];
+        else Response::json([
+            'status'=>'ko',
+            'error'=>$auth[1]
+        ],401);
     }
 }
 

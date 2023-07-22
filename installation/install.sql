@@ -29,7 +29,7 @@ CREATE TABLE `NewDeal`.`User` (
   `password` VARCHAR(255) NOT NULL,
   `city_trust` INT,
   `state_trust` INT,
-  `role` INT,
+  `role` INT NOT NULL DEFAULT 0,
   `city` INT,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,

@@ -6,16 +6,11 @@ require '../vendor/autoload.php';
 
 Private\Utils\Dotenv::load('../.env');
 
-$auth=Private\Auth::user(['user','admin']);
-
-list($auth,$err,$data)=$auth;
-if(!$auth) Response::json([
-    'status'=>'ko',
-    'error'=>$err
-],401);
+$data=Private\Auth::middleware(['user','admin']);
 
 Response::json([
-    'status'=>'ok'
+    'status'=>'ok',
+    'data'=>$data
 ],200);
 
 //if(!$auth) return Private\Response::redirect('/login.php');

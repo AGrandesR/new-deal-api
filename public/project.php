@@ -7,12 +7,8 @@ use Private\Utils\DatabaseTool;
 require '../vendor/autoload.php';
 
 Private\Utils\Dotenv::load('../.env');
-$auth=Private\Auth::user(['user','councilor','congress','admin']);
-list($auth,$err,$user)=$auth;
-if(!$auth) Response::json([
-    'status'=>'ko',
-    'error'=>$err
-],401);
+
+$data=Private\Auth::middleware(['user','councilor','congress','admin']);
 
 try{
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
