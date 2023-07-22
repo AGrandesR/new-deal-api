@@ -15,6 +15,16 @@ CREATE TABLE `NewDeal`.`Role` (
   PRIMARY KEY (`id`)
 );
 
+INSERT INTO `NewDeal`.`Role` (id,description) VALUES 
+  (1,'citizen'), -- Default value
+  (2,'state_executive'), -- Admin position of NewDeal
+  (3,'city_executive'), -- Admin position of NewDeal
+  (4,'city_delegate'), -- city_trust
+  (5,'state_delegate'), -- state_trust
+  (6,'senator'), -- land_trust
+  (7,'councilor'), -- city_councilor (X councilors)
+  (8,'congress'); -- state_councilor
+
 CREATE TABLE `NewDeal`.`City` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
@@ -29,7 +39,7 @@ CREATE TABLE `NewDeal`.`User` (
   `password` VARCHAR(255) NOT NULL,
   `city_trust` INT,
   `state_trust` INT,
-  `role` INT NOT NULL DEFAULT 0,
+  `role` INT NOT NULL DEFAULT 1,
   `city` INT,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
@@ -39,14 +49,15 @@ CREATE TABLE `NewDeal`.`User` (
   FOREIGN KEY (`state_trust`) REFERENCES `NewDeal`.`User`(`id`)
 );
 
-INSERT INTO `NewDeal`.`User` (`mail`, `password`, `city_trust`, `state_trust`, `role`, `city`)
+INSERT INTO `NewDeal`.`User` (`mail`, `password`, `city_trust`, `state_trust`, `city`)
 VALUES
-  ('test1@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL),
-  ('test2@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL),
-  ('test3@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL),
-  ('test4@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL),
-  ('test5@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL),
-  ('test6@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL);
+  ('test1@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL),
+  ('test2@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL),
+  ('test3@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL),
+  ('test4@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL),
+  ('test5@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL),
+  ('test6@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL);
+
 UPDATE `NewDeal`.`User` SET `city_trust`=1 WHERE `id`=2;
 UPDATE `NewDeal`.`User` SET `city_trust`=1 WHERE `id`=3;
 UPDATE `NewDeal`.`User` SET `city_trust`=2 WHERE `id`=4;
@@ -56,22 +67,10 @@ CREATE TABLE `NewDeal`.`UserTrustData`(
   `user_id` INT NOT NULL,
   `direct_trust` INT, -- This is the SUM of the trust received
   `all_trust` INT,
-  `scope` VARCHAR(25) CHECK (`scope` IN ('city', 'land', 'state', NULL))
+  `scope` VARCHAR(25) CHECK (`scope` IN ('city', 'land', 'state', NULL)),
   PRIMARY KEY (`user_id`),
   FOREIGN KEY (`user_id`) REFERENCES `NewDeal`.`User`(`id`)
 );
-
-
-INSERT INTO `NewDeal`.`Role` (description) VALUES 
-  ('citizen'), -- Default value
-  ('state_executive'), -- Admin position of NewDeal
-  ('city_executive'), -- Admin position of NewDeal
-  ('city_delegate'), -- city_trust
-  ('state_delegate'), -- state_trust
-  ('senator'), -- land_trust
-  ('councilor'), -- city_councilor (X councilors)
-  ('congress'); -- state_councilor
-
 
 CREATE TABLE `NewDeal`.`Project` (
     id INT PRIMARY KEY,
@@ -81,15 +80,16 @@ CREATE TABLE `NewDeal`.`Project` (
     vote_system INT,
     owner INT,
     city INT, -- if is null is and state proposal
-    FOREIGN KEY (owner) REFERENCES `NewDeal`.`User`(id)
+    FOREIGN KEY (owner) REFERENCES `NewDeal`.`User`(id),
     FOREIGN KEY (city) REFERENCES `NewDeal`.`City`(id)
 );
 
 CREATE TABLE `NewDeal`.`Survey` (
   project_id INT,
   hashed_user VARCHAR(255),
-  decision VARCHAR(25) CHECK (decision IN ('YES', 'NO', 'WHITE', NULL))
-  FOREIGN KEY (owner) REFERENCES `NewDeal`.`Project`(id)
+  decision VARCHAR(25) CHECK (decision IN ('YES', 'NO', 'WHITE', NULL)),
+  owner INT,
+  FOREIGN KEY (owner) REFERENCES `NewDeal`.`Project` (id)
 );
 
 -- CREATE TABLE `NewDeal`.`VoteSystem` (
