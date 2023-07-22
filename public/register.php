@@ -22,7 +22,7 @@ try {
             //Check response data
 
             //region DELETE preuser data if exist with this mail
-            $sqlDeletePreuserData="DELETE FROM preusers WHERE mail = :mail;";
+            $sqlDeletePreuserData="DELETE FROM preuser WHERE mail = :mail;";
             DatabaseTool::sql('',$sqlDeletePreuserData,['mail'=>$_POST['mail']]);
             //endregion
 
@@ -39,9 +39,9 @@ try {
             $data['token'] = tokenGenerator();
             //region SAVE preuser
             $db = new DatabaseTool('');
-            DatabaseTool::sql('',"INSERT INTO preusers (token, mail, password) VALUES (:token, :mail, :pass)", $data);
+            DatabaseTool::sql('',"INSERT INTO preuser (token, mail, password) VALUES (:token, :mail, :pass)", $data);
             //endregion
-    
+
             //SEND MAIL WITH TOKEN
             $mail = new MailTool();
             $mail->addAddress($data['mail']);
@@ -67,7 +67,7 @@ try {
             ],201);
     } else {
         //SQL query
-        $sqlFindPreuser="SELECT * FROM preusers WHERE token = :token;";
+        $sqlFindPreuser="SELECT * FROM Preuser WHERE token = :token;";
         try{
             $preuserData = DatabaseTool::sql('',$sqlFindPreuser,['token'=>$_GET['register']]);
         } catch(Exception $e) {
@@ -80,10 +80,10 @@ try {
             ],400);
         }
         //Check response data
-        if(!is_array($preuserData)) throw new Exception("We dont have preusers data");
+        if(!is_array($preuserData)) throw new Exception("We dont have preuser data");
         $preuserData=$preuserData[0];
         //SQL delete
-        $sqlDeletePreuserData="DELETE FROM preusers WHERE token = :token;";
+        $sqlDeletePreuserData="DELETE FROM preuser WHERE token = :token;";
         DatabaseTool::sql('',$sqlDeletePreuserData,['token'=>$_GET['register']]);
         //IGNORE $preuserData to next SQL insert
         unset($preuserData['token']);

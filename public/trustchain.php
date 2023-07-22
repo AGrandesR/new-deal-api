@@ -17,11 +17,18 @@ if(!$auth) Response::json([
 ],401);
 
 try{
+    if(!isset($_GET['type']) || !in_array($_GET['type'],['land','city','state'])) throw new Exception("You need to send a type in the request Query", 400);
+    $type=$_GET['type'];
     $userID=$data['id'];
-    $cacheFileKey="trustChain$userID";
+    $cacheFileKey=$type."_trustChain$userID";
     Cache::show($cacheFileKey,'json');
-    $trustChain=Queries::getTrustChain($userID);
-    Cache::write($cacheFileKey,json_encode($trustChain));
+
+    $trustChain=Queries::getTrustChain($userID,$type);
+    $response=[
+        'status'=>'ok',
+        'data'=>$trustChain
+    ];
+    Cache::write($cacheFileKey,json_encode($response));
     Response::json($trustChain);
 
 } catch(Exception $e) {

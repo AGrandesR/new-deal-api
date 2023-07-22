@@ -42,11 +42,24 @@ CREATE TABLE `NewDeal`.`User` (
 INSERT INTO `NewDeal`.`User` (`mail`, `password`, `city_trust`, `state_trust`, `role`, `city`)
 VALUES
   ('test1@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL),
+  ('test2@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL),
   ('test3@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL),
   ('test4@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL),
   ('test5@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL),
   ('test6@newdeal.com', '$5$5000$z.wVGYiK0FcsG/gFkZqBtsmO6xaVGTI3gkcDevmILO7', NULL, NULL, NULL, NULL);
+UPDATE `NewDeal`.`User` SET `city_trust`=1 WHERE `id`=2;
+UPDATE `NewDeal`.`User` SET `city_trust`=1 WHERE `id`=3;
+UPDATE `NewDeal`.`User` SET `city_trust`=2 WHERE `id`=4;
+UPDATE `NewDeal`.`User` SET `city_trust`=2 WHERE `id`=5;
 
+CREATE TABLE `NewDeal`.`UserTrustData`(
+  `user_id` INT NOT NULL,
+  `direct_trust` INT, -- This is the SUM of the trust received
+  `all_trust` INT,
+  `scope` VARCHAR(25) CHECK (`scope` IN ('city', 'land', 'state', NULL))
+  PRIMARY KEY (`user_id`),
+  FOREIGN KEY (`user_id`) REFERENCES `NewDeal`.`User`(`id`)
+);
 
 
 INSERT INTO `NewDeal`.`Role` (description) VALUES 
@@ -63,16 +76,24 @@ INSERT INTO `NewDeal`.`Role` (description) VALUES
 CREATE TABLE `NewDeal`.`Project` (
     id INT PRIMARY KEY,
     title VARCHAR(255),
-    description TEXT,
-    expiration_date DATE,
+    description TEXT NOT NULL,
+    expiration_date DATE NOT NULL,
     vote_system INT,
     owner INT,
+    city INT, -- if is null is and state proposal
     FOREIGN KEY (owner) REFERENCES `NewDeal`.`User`(id)
+    FOREIGN KEY (city) REFERENCES `NewDeal`.`City`(id)
 );
 
 CREATE TABLE `NewDeal`.`Survey` (
   project_id INT,
   hashed_user VARCHAR(255),
-  decision VARCHAR(255) CHECK (decision IN ('YES', 'NO', 'WHITE', NULL))
+  decision VARCHAR(25) CHECK (decision IN ('YES', 'NO', 'WHITE', NULL))
   FOREIGN KEY (owner) REFERENCES `NewDeal`.`Project`(id)
 );
+
+-- CREATE TABLE `NewDeal`.`VoteSystem` (
+--   id INT PRIMARY KEY,
+--   description VARCHAR(255),
+--   FOREIGN KEY (owner) REFERENCES `NewDeal`.`Project`(id)
+-- );
