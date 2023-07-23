@@ -6,7 +6,7 @@ require '../vendor/autoload.php';
 
 Private\Utils\Dotenv::load('../.env');
 
-$data=Private\Auth::middleware(['user','admin']);
+$data=Private\Auth::middleware(['citizen','admin']);
 
 Response::json([
     'status'=>'ok',

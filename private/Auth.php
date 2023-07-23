@@ -6,6 +6,16 @@ use Private\Utils\Cryptor;
 
 class Auth {
     static function user($roles){
+        $rolesToId=[
+            1=>'citizen',
+            2=>'state_executive',
+            3=>'city_executive',
+            4=>'city_delegate',
+            5=>'state_delegate',
+            6=>'senator',
+            7=>'councilor',
+            8=>'congress'
+        ];
         try {
             // Retrieve the "token" header
             $token = isset($_SERVER['HTTP_TOKEN']) ? $_SERVER['HTTP_TOKEN'] : '';
@@ -13,8 +23,10 @@ class Auth {
             if(empty($token)) throw new Exception("Auth error: No token in header", 401);
             
             $data = Cryptor::decrypt($token, $_ENV['CRYPTOR_SECRET']);
-    
-            if(!in_array($data['role'],$roles) && $data['role']!=='root') throw new Exception("Auth error: Unauthorized role", 401);
+            if(!empty($roles)){
+                $role=$rolesToId[$data['role']];
+                if(!in_array($role,$roles) && $role!=='root') throw new Exception("Auth error: Unauthorized role", 401);
+            }
     
             $expirationTimeInSeconds=3600;
             if((time()-$data['time'])>$expirationTimeInSeconds) throw new Exception("Auth error: Expiration", 401);

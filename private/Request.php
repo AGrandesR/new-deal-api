@@ -23,9 +23,12 @@ class Request {
     }
     static function checkPostDataWithRegex(array $postDataToCheck,$errorMsg='Fields not received: %fields%') {
         $notReceived=[];
+        $returnData=[];
         foreach ($postDataToCheck as $value=>$regex) {
             if(!isset($_POST[$value]) || !preg_match($regex,$_POST[$value])) $notReceived[]=$value;
+            else $returnData[]=$_POST[$value];
         }
         if(!empty($notReceived)) throw new Exception(str_replace('%fields%',implode(',',$notReceived),$errorMsg),400);
+        return $returnData;
     }
 }

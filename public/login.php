@@ -16,9 +16,9 @@ try {
         'pass'=>'/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/'
     ]);
 
-    $userData = Data::get('user', [
+    $userData = Data::get('User', [
         'mail'=>$_POST['mail'],
-        'pass'=>HT::create($_POST['pass'])
+        'password'=>HT::create($_POST['pass'])
     ]);
 
     if(is_array($userData)) Response::json([

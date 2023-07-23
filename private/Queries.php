@@ -14,9 +14,12 @@ class Queries {
             SELECT c.$setter FROM newdeal.User c
             INNER JOIN recursive_loop  l ON l.$setter = c.id
         ) SELECT * FROM recursive_loop ;";
-        return array_column(DatabaseTool::sql('',$sql, [
+
+        $data=DatabaseTool::sql('',$sql, [
             'id'=>$id
-        ]), $setter);
+        ]);
+        if(!is_array($data) || empty($data)) return [];
+        return array_column($data, $setter);
     }
 
     static function getTrustLegacy($id, $setter) {
