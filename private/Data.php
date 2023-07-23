@@ -15,6 +15,12 @@ class Data {
         $sql="SELECT * FROM $from WHERE $str";
         return DatabaseTool::sql($flag,$sql,$where);
     }
+    static function insert(string $to, array $values, $flag='') {
+        $strvalues=implode(',',array_keys($values));
+        $strdata=':'.implode(',:',array_keys($values));
+        $sql="INSERT INTO $to ($strvalues) VALUES ($strdata)";
+        return DatabaseTool::sql($flag,$sql,$values);
+    }
     static function delete(string $from,array $where, int $limit, $flag='') {
         $str='';
         $first=true;
