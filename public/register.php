@@ -14,6 +14,7 @@ use Private\Utils\MailTool;
 
 try {
     if($_SERVER['REQUEST_METHOD']=='POST'){
+        Private\Cors::allow();
         Request::checkPostDataWithRegex([
             'mail'=>'/^\S+@\S+\.\S+$/',
             'pass'=>'/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/'
@@ -88,6 +89,7 @@ try {
     }
 } catch(Exception $e){
     Private\Response::json([
+        "status"=>"ko",
         "error"=>1,
         "message"=>$e->getMessage(),
         "file"=>$e->getFile(),

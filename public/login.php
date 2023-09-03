@@ -10,6 +10,7 @@ use Private\Data;
 use Private\Utils\HashTool As HT;
 
 try {
+    Private\Cors::allow();
     //CHECK POST BODY
     Request::checkPostDataWithRegex([
         'mail'=>'/^\S+@\S+\.\S+$/',
