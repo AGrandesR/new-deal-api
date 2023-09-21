@@ -1,6 +1,5 @@
 <?php
 require '../vendor/autoload.php';
-
 Private\Utils\Dotenv::load('../.env');
 
 use Private\Auth;

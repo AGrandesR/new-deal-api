@@ -2,7 +2,7 @@
 namespace Private;
 
 class Cors {
-    static function allow(array $url=['http://localhost:3000'], array $methods=[]) {
+    static function allow(array $url=['http://localhost:3000'], array $methods=[], array $headers=['Authorization', 'Content-Type']) {
         $origin = $_SERVER['HTTP_ORIGIN'];
 
         $allowedOrigins = $url;
@@ -11,7 +11,7 @@ class Cors {
             header('Access-Control-Allow-Origin: ' . $origin);
 
             header('Access-Control-Allow-Methods: ' . empty($methods)?'*' : implode(', ', $methods));
-            header('Access-Control-Allow-Headers: Authorization, Content-Type');
+            header('Access-Control-Allow-Headers: ' . implode(', ', $headers));
 
             header('Access-Control-Allow-Credentials: true');
         }

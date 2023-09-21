@@ -1,16 +1,15 @@
 <?php
+require '../vendor/autoload.php';
+Private\Utils\Dotenv::load('../.env');
 
 use Private\Response;
 
-require '../vendor/autoload.php';
 
-Private\Utils\Dotenv::load('../.env');
-
-$data=Private\Auth::middleware(['citizen','admin']);
+$auth=Private\Auth::middleware(['citizen','admin']);
 
 Response::json([
     'status'=>'ok',
-    'data'=>$data
+    'data'=>$auth
 ],200);
 
 //if(!$auth) return Private\Response::redirect('/login.php');
