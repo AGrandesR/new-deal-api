@@ -51,7 +51,7 @@ try{
         ],401);
     }
     //Buscamos el SQL de la sentecia actual
-    $sqlGetProject='SELECT * FROM ';
+    $sqlGetProject='SELECT * FROM ...';
     $project=DatabaseTool::sql('',$sqlGetProject,$keys);
     if(!$auth) Response::json([
         'status'=>'ok',

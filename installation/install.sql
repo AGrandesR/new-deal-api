@@ -40,7 +40,7 @@ CREATE TABLE `NewDeal`.`User` (
   `city_trust` INT,
   `state_trust` INT,
   `role` INT NOT NULL DEFAULT 1,
-  `city` INT,
+  `city` INT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   UNIQUE INDEX `mail_UNIQUE` (`mail` ASC) VISIBLE,
@@ -48,6 +48,25 @@ CREATE TABLE `NewDeal`.`User` (
   FOREIGN KEY (`city_trust`) REFERENCES `NewDeal`.`User`(`id`),
   FOREIGN KEY (`state_trust`) REFERENCES `NewDeal`.`User`(`id`)
 );
+CREATE TABLE `NewDeal`.`Party` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `website` VARCHAR(90) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
+)
+CREATE TABLE `NewDeal`.`CandidateUser` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `firstname` VARCHAR(45) NOT NULL,
+  `lastname` VARCHAR(90) NOT NULL,
+  `website` VARCHAR(90) NOT NULL,
+  `party` INT,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
+  FOREIGN KEY (`party`) REFERENCES `NewDeal`.`Party`(`id`),
+)
 
 INSERT INTO `NewDeal`.`User` (`mail`, `password`, `city_trust`, `state_trust`, `city`)
 VALUES
